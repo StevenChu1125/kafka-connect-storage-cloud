@@ -14,15 +14,16 @@
   ~ WARRANTIES OF ANY KIND, either express or implied.  See the License for the
   ~ specific language governing permissions and limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.confluent</groupId>
-        <artifactId>kafka-connect-storage-common-parent</artifactId>
-        <version>11.0.4</version>
-    </parent>
+    <!--    <parent>-->
+    <!--        <groupId>io.confluent</groupId>-->
+    <!--        <artifactId>kafka-connect-storage-common-parent</artifactId>-->
+    <!--        <version>10.2.2</version>-->
+    <!--    </parent>-->
 
     <groupId>io.confluent</groupId>
     <artifactId>kafka-connect-storage-cloud</artifactId>
@@ -58,6 +59,116 @@
     </modules>
 
     <properties>
+        <argLine/>
+        <avro.version>1.9.2</avro.version>
+        <required.maven.version>3.2</required.maven.version>
+        <confluent.version>6.0.3</confluent.version>
+        <kafka.version>2.7.0</kafka.version>
+        <ce.kafka.version>2.7.0</ce.kafka.version>
+        <easymock.version>4.0.1</easymock.version>
+        <!--  keep exec-maven-plugin on 1.5.0 until https://github.com/mojohaus/exec-maven-plugin/issues/76 is fixed
+                     running our LicenseFinder plugin in create-licenses-for-docker breaks when upgrading to 1.6.0  -->
+        <exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
+        <spotbugs.version>4.0.2</spotbugs.version>
+        <spotbugs.maven.plugin.version>4.0.0</spotbugs.maven.plugin.version>
+        <java.version>8</java.version>
+        <jackson.version>2.10.5</jackson.version>
+        <jackson.bom.version>2.10.5.20201202</jackson.bom.version>
+        <jackson.cbor.version>2.11.4</jackson.cbor.version>
+        <gson.version>2.8.6</gson.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <junit.version>4.13.1</junit.version>
+        <kafka.scala.version>2.13</kafka.scala.version>
+        <scala.version>2.13.2</scala.version>
+        <licenses.version>${confluent.version}</licenses.version>
+        <maven-assembly.version>3.0.0</maven-assembly.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+        <maven-deploy.version>2.8.2</maven-deploy.version>
+        <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+        <maven-site-plugin.version>3.9.0</maven-site-plugin.version>
+        <maven-project-info-reports-plugin.version>3.1.1</maven-project-info-reports-plugin.version>
+        <mbknor-jackson-jsonschema.version>1.0.39</mbknor-jackson-jsonschema.version>
+        <buildnumber-plugin.version>1.4</buildnumber-plugin.version>
+        <mockito.version>2.23.0</mockito.version>
+        <mockito-all.version>1.10.19</mockito-all.version>
+        <os-maven-plugin.version>1.6.2</os-maven-plugin.version>
+        <slf4j-api.version>${slf4j.version}</slf4j-api.version>
+        <jaxb.version>2.3.0</jaxb.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <!--  Update to 2.0.0 for unit test patch usage  -->
+        <powermock.version>2.0.0</powermock.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <confluent-log4j.version>1.2.17-cp2</confluent-log4j.version>
+        <zkclient.version>0.11</zkclient.version>
+        <zookeeper.version>3.5.8</zookeeper.version>
+        <bouncycastle.version>1.68</bouncycastle.version>
+        <checkstyle.version>8.18</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+        <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <checkstyle.config.location>checkstyle/checkstyle.xml</checkstyle.config.location>
+        <checkstyle.suppressions.location>checkstyle/common-suppressions.xml</checkstyle.suppressions.location>
+        <dependency.check.version>6.1.6</dependency.check.version>
+        <dependency.check.suppressions.location>dependency-check/suppressions.xml
+        </dependency.check.suppressions.location>
+        <dependency.check.skip>false</dependency.check.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--  docker build support  -->
+        <GIT_COMMIT>unknown</GIT_COMMIT>
+        <BUILD_NUMBER>-1</BUILD_NUMBER>
+        <docker.skip-build>true</docker.skip-build>
+        <docker.skip-test>true</docker.skip-test>
+        <docker.registry>placeholder/</docker.registry>
+        <!--  Registry for this build. Must specify a value, or exec plugin throws NPE :(((  -->
+        <docker.tag>${project.version}</docker.tag>
+        <!--  Tag for this build  -->
+        <docker.upstream-registry>${docker.registry}</docker.upstream-registry>
+        <!--  Registry for base images  -->
+        <docker.upstream-tag>${docker.tag}</docker.upstream-tag>
+        <!--  Tag for base images  -->
+        <docker.test-registry>${docker.upstream-registry}</docker.test-registry>
+        <!--  Registry for integration test dependencies  -->
+        <docker.test-tag>${docker.upstream-tag}</docker.test-tag>
+        <!--  Tag for integration test dependencies  -->
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <!--  The name of the docker file to run.  -->
+        <docker.file>Dockerfile</docker.file>
+        <!--  Pull the latest base image or use a local image.  -->
+        <docker.pull-image>false</docker.pull-image>
+        <dependency.check.skip>true</dependency.check.skip>
+        <avro.version>1.10.2</avro.version>
+        <commons-io.version>2.7</commons-io.version>
+        <commons.beanutils.version>1.9.4</commons.beanutils.version>
+        <commons.codec.version>1.15</commons.codec.version>
+        <commons.compress.version>1.21</commons.compress.version>
+        <confluent.log4j.version>1.2.17-cp2</confluent.log4j.version>
+        <confluent.maven.repo>http://packages.confluent.io/maven/</confluent.maven.repo>
+        <dependency.check.version>6.1.6</dependency.check.version>
+        <hadoop.version>2.10.1</hadoop.version>
+        <hive.version>2.3.7</hive.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <httpcore.version>4.4.4</httpcore.version>
+        <jackson.version>2.10.5</jackson.version>
+        <jackson.databind.version>2.10.5.1</jackson.databind.version>
+        <jackson.mapper.asl.version>1.9.14.jdk17-redhat-00001</jackson.mapper.asl.version>
+        <jetty.version>9.4.40.v20210413</jetty.version>
+        <jline.version>2.12.1</jline.version>
+        <joda.version>2.9.6</joda.version>
+        <kafka.connect.storage.common.version>5.5.7</kafka.connect.storage.common.version>
+        <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <netty.version>4.1.63.Final</netty.version>
+        <parquet.version>1.11.1</parquet.version>
+        <json.smart.version>2.4.7</json.smart.version>
+        <thrift.version>0.13.0</thrift.version>
+        <tomcat.version>8.5.65</tomcat.version>
         <confluent.maven.repo>http://packages.confluent.io/maven/</confluent.maven.repo>
         <checkstyle.suppressions.location>checkstyle/suppressions.xml</checkstyle.suppressions.location>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
@@ -71,8 +182,147 @@
             <id>confluent</id>
             <name>Confluent</name>
             <url>${confluent.maven.repo}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- children -->
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-storage-common</artifactId>
+                <version>${kafka.connect.storage.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-storage-core</artifactId>
+                <version>${kafka.connect.storage.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-storage-format</artifactId>
+                <version>${kafka.connect.storage.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-storage-partitioner</artifactId>
+                <version>${kafka.connect.storage.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-storage-wal</artifactId>
+                <version>${kafka.connect.storage.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-connect-avro-data</artifactId>
+                <version>${confluent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.parquet</groupId>
+                <artifactId>parquet-column</artifactId>
+                <version>${parquet.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.parquet</groupId>
+                <artifactId>parquet-avro</artifactId>
+                <version>${parquet.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${httpcore.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--  Pinning for CVEs  -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons.beanutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons.compress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.minidev</groupId>
+                <artifactId>json-smart</artifactId>
+                <version>${json.smart.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.thrift</groupId>
+                <artifactId>libthrift</artifactId>
+                <version>${thrift.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${jackson.mapper.asl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-io</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -83,6 +333,7 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-api</artifactId>
+            <version>${kafka.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -94,6 +345,7 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-json</artifactId>
+            <version>${kafka.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -116,11 +368,6 @@
             <groupId>io.confluent</groupId>
             <artifactId>kafka-connect-storage-common-htrace-core4-shaded</artifactId>
             <version>${kafka.connect.storage.common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.databind.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -193,30 +440,25 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-mapreduce-client-core</artifactId>
-            <version>${hadoop.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hadoop</groupId>-->
+<!--            <artifactId>hadoop-mapreduce-client-core</artifactId>-->
+<!--            <version>${hadoop.version}</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.avro</groupId>-->
+<!--                    <artifactId>avro</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>log4j</groupId>-->
+<!--                    <artifactId>log4j</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -234,6 +476,7 @@
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-easymock</artifactId>
+            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -254,20 +497,20 @@
     <build>
         <pluginManagement>
             <plugins>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                      <argLine>@{argLine} -Djava.awt.headless=true</argLine>
-                      <reuseForks>false</reuseForks>
-                      <forkCount>1</forkCount>
-                  </configuration>
-              </plugin>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-assembly-plugin</artifactId>
-              </plugin>
-           </plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <argLine>@{argLine} -Djava.awt.headless=true</argLine>
+                        <reuseForks>false</reuseForks>
+                        <forkCount>1</forkCount>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                </plugin>
+            </plugins>
         </pluginManagement>
     </build>
 </project>
